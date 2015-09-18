@@ -1,4 +1,4 @@
-Problem: Ubuntu Touch as of 09/17/2015 doesn't install correctly following official guide on my Nexus 7.  Nexus 7 is a "reference" device.  What's wrong with mine?  
+Problem: Ubuntu Touch as of 09/17/2015 doesn't install correctly following the official guide on my Nexus 7.  Nexus 7 is a "reference" device.  What's wrong with mine?  
 
 Poking around the internet (xda, #ubuntu-touch, #ubuntu-kernel) I found that newer Nexus 7 "flo" models, made in/after late 2014 have a different revision to their eMMC controller/hardware/something.  Asus posted a kernel change:
 ```
@@ -24,9 +24,9 @@ index dc4b125..ea1eca7 100644
 ```
 So I had a hunch that this was it.  Now the interesting part is that unlike CyanogenMod the kernel is NOT built as part of the Ubuntu Touch build (at least following the guide), it actually comes from a separate package.  
 
-The flo branch of the Ubuntu kernel doesn't have the fix applied (yet?).  
+The flo branch of the Ubuntu kernel doesn't have the fix applied.  Hopefully this will be fixed soon.  
 
-I built a patched kernel using ubuntu-wily source on the flo branch and created boot and recovery images that appear to work.  We aren't touching the bootloader so this should be safe, but I carry no responsibility if the following procedure bricks your device.
+I built a patched kernel using ubuntu-wily source on the flo branch and pushed it into otherwise unmodified boot and recovery images.  We aren't touching the bootloader so this should be safe, but I carry no responsibility if the following procedure bricks your device.
 
 Download boot.img and recovery.img from here: 
 
