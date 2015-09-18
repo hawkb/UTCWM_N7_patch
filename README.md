@@ -1,6 +1,7 @@
-So I also wanted to play with Ubuntu Touch a few days ago and ran into this exact issue.
+Problem: Ubuntu Touch as of 09/17/2015 doesn't install correctly following official guide on my Nexus 7.  Nexus 7 is a "reference" device.  What's wrong with mine?  
 
-Problem: Ubuntu Touch as of 09/17/2015 doesn't install correctly following official guide on my Nexus 7.  Nexus 7 is a "reference" device, so it definitely should, and is known to be working.  What's wrong with mine?  Poking around the internet (xda, #ubuntu-touch, #ubuntu-kernel) I found that newer Nexus 7 "flo" models, made in/after late 2014 have a different revision to their eMMC controller/hardware/something.  Asus posted a kernel change:
+Poking around the internet (xda, #ubuntu-touch, #ubuntu-kernel) I found that newer Nexus 7 "flo" models, made in/after late 2014 have a different revision to their eMMC controller/hardware/something.  Asus posted a kernel change:
+```
 mmc: add 5.0 emmc support
 
 bug: 17968808 Kernel change for new eMMC v5.0 parts for FLO/DEB
@@ -20,14 +21,16 @@ index dc4b125..ea1eca7 100644
  		pr_err("%s: unrecognised EXT_CSD revision %d\n",
  			mmc_hostname(card->host), card->ext_csd.rev);
  		err = -EINVAL;
+```
+So I had a hunch that this was it.  Now the interesting part is that unlike CyanogenMod the kernel is NOT built as part of the Ubuntu Touch build (at least following the guide), it actually comes from a separate package.  
 
-
-So I had a hunch that this was it.  The kernel you're getting using the official tool doesn't have the patch applied.  We need to build a patched kernel, and replace it in both the boot and the recovery images.  The flo branch of the Ubuntu kernel doesn't have the fix applied (yet?).  
+The flo branch of the Ubuntu kernel doesn't have the fix applied (yet?).  
 
 I built a patched kernel using ubuntu-wily source on the flo branch and created boot and recovery images that appear to work.  We aren't touching the bootloader so this should be safe, but I carry no responsibility if the following procedure bricks your device.
 
 Download boot.img and recovery.img from here: 
 
+```
 1) Return your device to stock:
 	a. Obtain Google Factory image "razor-lmy48m-factory-7c77e178.tgz"
 	b. Run "flash-all.sh" with device in the bootloader
@@ -42,5 +45,6 @@ Download boot.img and recovery.img from here:
 8) The device will reboot and get stuck on the Google logo.  Power the device off.
 9) Boot the device into the bootloader.  Repeat steps 3 and 4 to reflash the boot and recovery images.
 10) Power off and start the device.  Ubuntu should start booting fairly quickly.
+```
 
-
+If you update your Ubuntu image you may have to reflash the boot.img and recovery.img, until this is fixed in the official "flo" branch of the Ubuntu kernel repo.
